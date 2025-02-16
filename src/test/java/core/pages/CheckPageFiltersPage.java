@@ -58,6 +58,7 @@ public class CheckPageFiltersPage {
         WebElement redSwatch = basePageObject.getWaitUtils().waitForElementClickable(elements.redColorJackets);
         WaitUtils.waitFor(1500);
         redSwatch.click();
+        WaitUtils.waitFor(3000);
 
         basePageObject.getWaitUtils().waitForElementVisible(elements.productItems.get(0));
     }
@@ -120,6 +121,5 @@ public class CheckPageFiltersPage {
         }
         return true;
     }
-
 
 }

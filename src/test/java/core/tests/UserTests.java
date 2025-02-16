@@ -83,19 +83,24 @@ WishListPage wishListPage = new WishListPage();
     @Test(priority = 4, dependsOnMethods = "checkPageFilters")
     public void wishListTest() {
 
-//        signInPage.getUrl(Globals.baseUrl);
-//        signInPage.clickSignInLink();
-//
-//        signInPage.setEmail(Globals.email);
-//        signInPage.setPassword(Globals.password);
-//        signInPage.clickSignInButton();
-
-
         wishListPage.removePriceFilter();
         wishListPage.checkThatCountIsIncreased();
-        wishListPage.clickOnProductItemAndWait();
+        wishListPage.clickOnProductItemAndWait(0);
         wishListPage.clickOnAddToWishListButtonAndWait();
+        wishListPage.isProductSuccessfulWishListMessageDisplayed(0);
+        // check successcful message
+        checkPageFiltersPage.navigateToJacketsPage();
+        checkPageFiltersPage.selectRedColorFilter();
+        wishListPage.clickOnProductItemAndWait(1);
+        wishListPage.clickRedOptionToJackets();
+        wishListPage.clickOnAddToWishListButtonAndWait();
+        wishListPage.isProductSuccessfulWishListMessageDisplayed(1);
+
+
+        wishListPage.verifyTwoItemsAreDisplayed(2);
         WaitUtils.waitFor(3000);
+
+
 
     }
 }
