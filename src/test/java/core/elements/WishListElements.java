@@ -1,12 +1,17 @@
 package core.elements;
 
+import core.utilities.BaseInformation;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 public class WishListElements {
+    public WishListElements(){
+        PageFactory.initElements(BaseInformation.getDriver(), this);
+    }
 
     @FindBy(xpath = "//a[@class='action remove' and contains(@href, 'color=58')]")
     public WebElement removePriceButton;

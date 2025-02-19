@@ -12,4 +12,5 @@ public class Globals {
     public static String lastName;
 
     public static int cardsCount;
+    public static Integer shoppingCartCount;
 }

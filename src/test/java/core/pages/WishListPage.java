@@ -31,9 +31,7 @@ public class WishListPage {
     }
     public void checkThatCountIsIncreased() {
         String totalAmountText = elements.totalAmountValue.getText().trim();
-        int total;
-        try {
-            total = Integer.parseInt(totalAmountText);
+        int total = Integer.parseInt(totalAmountText);
             int cardsCount = Globals.cardsCount;
 
             // Check if the total amount is less than or equal to the cards count
@@ -42,9 +40,6 @@ public class WishListPage {
                 throw new IllegalStateException("Total amount (" + total + ") is not greater than cards count (" + cardsCount + ")");
             }
 
-        } catch (NumberFormatException e) {
-            System.out.println("Failed to parse total amount value: " + totalAmountText);
-        }
         WaitUtils.waitFor(1500);
     }
 

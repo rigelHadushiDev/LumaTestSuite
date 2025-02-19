@@ -1,11 +1,17 @@
 package core.elements;
 
+import core.utilities.BaseInformation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
 import java.util.List;
 
 public class CheckPageFiltersElements {
 
+    public CheckPageFiltersElements(){
+        PageFactory.initElements(BaseInformation.getDriver(), this);
+    }
     @FindBy(xpath = "//a[@id=\"ui-id-4\"]/span[text()=\"Women\"]")
     public WebElement womenDropdown;
 
@@ -27,7 +33,6 @@ public class CheckPageFiltersElements {
     @FindBy(xpath = "//li[contains(@class,'product-item')]//div[@class='swatch-option color selected' and @option-label='Red']")
     public List<WebElement> redSwatches;
 
-
     @FindBy(xpath = "//div[@class='filter-options-title' and text()='Price']")
     public WebElement pricePanel;
 
@@ -38,6 +43,6 @@ public class CheckPageFiltersElements {
     public List<WebElement> cardsPriceRange;
 
     @FindBy(xpath = "//p[@class='toolbar-amount' and @id='toolbar-amount']//span[@class='toolbar-number']")
-    public WebElement totalAmount;
+    public WebElement totalCount;
 
 }

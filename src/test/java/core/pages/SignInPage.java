@@ -8,6 +8,8 @@ import core.utilities.WaitUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
+import java.io.Console;
+
 public class SignInPage {
     BasePageObject basePageObject = new BasePageObject(BaseInformation.getBaseInformation());
     SignInPageElements signInPageElements = new SignInPageElements();
@@ -57,6 +59,13 @@ public class SignInPage {
                 .waitForElementVisible(signInPageElements.welcomeMessage)
                 .getText();
     }
+    public void checkEqualityOfMessages(String message1, String message2) {
+;
+        if(!message1.equals(message2)){
+            throw new AssertionError(message1 + " not equal to " + message2);
+        }
+    }
+
 
     public void clickSignOut(){
         WebElement accDropdown = signInPageElements.dropDownAccountButton;

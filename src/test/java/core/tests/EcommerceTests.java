@@ -1,23 +1,24 @@
 package core.tests;
 
 import core.globals.Globals;
-import core.pages.CheckPageFiltersPage;
-import core.pages.RegisterPage;
-import core.pages.SignInPage;
-import core.pages.WishListPage;
+import core.pages.*;
 import core.utilities.BaseInformation;
 import core.utilities.WaitUtils;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
+import org.testng.annotations.Listeners;
+import core.listeners.ScreenshotListener;
 
-public class UserTests {
+@Listeners(ScreenshotListener.class)
+public class EcommerceTests {
 
     RegisterPage registerPage = new RegisterPage();
     SignInPage signInPage = new SignInPage();
     CheckPageFiltersPage checkPageFiltersPage = new CheckPageFiltersPage();
-WishListPage wishListPage = new WishListPage();
-
+    WishListPage wishListPage = new WishListPage();
+    ShoppingCartTestPage shoppingCartTestPage = new ShoppingCartTestPage();
+    EmptyShoppingCartPage emptyShoppingCartPage = new EmptyShoppingCartPage();
     @AfterTest
     public void quit() {
         BaseInformation.quit();
@@ -52,8 +53,7 @@ WishListPage wishListPage = new WishListPage();
 
         String actualWelcomeText = signInPage.getWelcomeMessageText();
 
-        Assert.assertEquals(actualWelcomeText, expectedWelcomeText,
-                "The welcome message did not match the expected text.");
+        signInPage.checkEqualityOfMessages(actualWelcomeText,expectedWelcomeText);
         signInPage.clickSignOut();
         WaitUtils.waitFor(3000);
     }
@@ -70,11 +70,10 @@ WishListPage wishListPage = new WishListPage();
         checkPageFiltersPage.navigateToJacketsPage();
         checkPageFiltersPage.selectRedColorFilter();
 
-        Assert.assertTrue(checkPageFiltersPage.verifyAllProductsHaveRedColorSelected(),
-                "Not all products have the red swatch selected.");
+        checkPageFiltersPage.verifyAllProductsHaveRedColorSelected();
 
         checkPageFiltersPage.selectWantedPriceFilter();
-        checkPageFiltersPage.verifyAllProductsHaveCorrectPriceRangeSelected();
+        checkPageFiltersPage.verifyThatOnlyTwoProductsAreDisplayed(2);
         checkPageFiltersPage.verifyAllProductPricesInRange();
         WaitUtils.waitFor(3000);
 
@@ -100,7 +99,35 @@ WishListPage wishListPage = new WishListPage();
         wishListPage.verifyTwoItemsAreDisplayed(2);
         WaitUtils.waitFor(3000);
 
+    }
 
+    @Test(priority = 5, dependsOnMethods = "checkPageFilters")
+    public void shoppingCartTest() {
+
+        checkPageFiltersPage.navigateToJacketsPage();
+        checkPageFiltersPage.selectRedColorFilter();
+        checkPageFiltersPage.selectWantedPriceFilter();
+        shoppingCartTestPage.clickOnProduct1Size();
+        shoppingCartTestPage.clickOnProduct2Size();
+        shoppingCartTestPage.hoverOverFirstCardAndClickAddToCart();
+        shoppingCartTestPage.verifyFirstProductIsAddedToCart();
+        shoppingCartTestPage.hoverOverSecondCardAndClickAddToCart();
+        shoppingCartTestPage.verifySecondProductIsAddedToCart();
+        shoppingCartTestPage.clickOnShoppingCartLink();
+        shoppingCartTestPage.verifyThatWeHaveNavigatedToShoppingCartPage();
+        shoppingCartTestPage.verifyTotalShoppingSum();
+        WaitUtils.waitFor(3000);
+    }
+
+    @Test(priority = 6, dependsOnMethods = "shoppingCartTest")
+    public void emptyShoppingCartTest() {
+        emptyShoppingCartPage.removeTheSecondShoppingItem();
+        emptyShoppingCartPage.verifyThatTheNumberOfTheItemsDecreases();
+        emptyShoppingCartPage.removeTheFirstShoppingItem();
+        emptyShoppingCartPage.verifyThatTheNumberOfTheItemsDecreases();
+        emptyShoppingCartPage.verifyThatTheEmptyShoppingCardIsDisplayed();
+        emptyShoppingCartPage.closeBrowser();
 
     }
-}
+
+    }
