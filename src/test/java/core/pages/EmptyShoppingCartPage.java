@@ -34,22 +34,19 @@ public class EmptyShoppingCartPage {
 
     public void verifyThatTheNumberOfTheItemsDecreases() {
         WebElement totalShoppingCounter = elements.totalShoppingCounter;
-
         Integer totalShoppingCounterInt;
-
-       if(totalShoppingCounter.getText().trim().isEmpty()){
-           totalShoppingCounterInt = 0;
-       }else {
-            totalShoppingCounterInt = Integer.parseInt(totalShoppingCounter.getText().trim());
-       }
-
-        if (Globals.shoppingCartCount <= totalShoppingCounterInt) {
-            throw new AssertionError("The shopping counter has not decreased.");
+        String counterText = totalShoppingCounter.getText().trim();
+        if (counterText.isEmpty()) {
+            totalShoppingCounterInt = 0;
+        } else {
+            totalShoppingCounterInt = Integer.parseInt(counterText);
         }
+        assert Globals.shoppingCartCount > totalShoppingCounterInt
+                : "The shopping counter has not decreased. Previous count: " + Globals.shoppingCartCount
+                + ", Current count: " + totalShoppingCounterInt;
 
         Globals.shoppingCartCount = totalShoppingCounterInt;
     }
-
 
     public void removeTheFirstShoppingItem() {
 
@@ -64,13 +61,12 @@ public class EmptyShoppingCartPage {
     }
 
     public void verifyThatTheEmptyShoppingCardIsDisplayed() {
-
         WebElement emptyShoppingCard = elements.emptyShoppingCart;
         String shoppingCardEmpty = "You have no items in your shopping cart.";
         String actualText = emptyShoppingCard.getText();
-        if(!actualText.equals(shoppingCardEmpty)) {
-            throw new AssertionError("The empty shopping card is not displayed.");
-        }
+        assert actualText.equals(shoppingCardEmpty)
+                : "The empty shopping card is not displayed. Expected: '" + shoppingCardEmpty + "', but was: '" + actualText + "'";
+
         WaitUtils.waitFor(1500);
     }
 

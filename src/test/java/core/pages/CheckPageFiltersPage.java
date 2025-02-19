@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -58,11 +59,10 @@ public class CheckPageFiltersPage {
         int totalCountValue = Integer.parseInt(totalCount.getText().trim());
         List<WebElement> redSwatches = elements.redSwatches;
         WaitUtils.waitFor(1500);
-        if( totalCountValue != redSwatches.size()) {
-        throw new AssertionError("Not all products have red color selected");
-        }
-
+        Assert.assertEquals(redSwatches.size(), totalCountValue, "Not all products have red color selected");
     }
+
+
 
     public void selectWantedPriceFilter() {
         WebElement pricePannel = basePageObject.getWaitUtils().waitForElementClickable(elements.pricePanel);
@@ -74,33 +74,35 @@ public class CheckPageFiltersPage {
         basePageObject.getWaitUtils().waitForElementVisible(elements.productItems.get(0));
     }
 
-    public void verifyThatOnlyTwoProductsAreDisplayed(int n ) {
+    public void verifyThatOnlyTwoProductsAreDisplayed(int expectedCount) {
         WebElement totalAmount = elements.totalCount;
         int totalAmountValue = Integer.parseInt(totalAmount.getText().trim());
         Globals.cardsCount = totalAmountValue;
         WaitUtils.waitFor(3000);
-        if (n != totalAmountValue) {
-            throw new AssertionError("There are not 2 products in total");
-        }
+        Assert.assertEquals(totalAmountValue, expectedCount, "The total number of products is not as expected.");
     }
 
     public void verifyAllProductPricesInRange() {
-        List<WebElement> prices =  elements.cardsPriceRange;
+        List<WebElement> prices = elements.cardsPriceRange;
+
+        assert prices != null && !prices.isEmpty() : "No price elements found";
 
         for (WebElement priceElement : prices) {
-            String priceText = priceElement.getText().replace("$", "").trim();
+            String priceText = priceElement.getText();
+            assert priceText != null && !priceText.isEmpty() : "Price text is empty for element: " + priceElement;
+
+            priceText = priceText.replace("$", "").trim();
+
             double price;
             try {
                 price = Double.parseDouble(priceText);
             } catch (NumberFormatException e) {
-                throw new AssertionError("Unable to parse price: " + priceText);
+                assert false : "Unable to parse price: " + priceText;
+                return;
             }
 
-            if (price < 50.00 || price > 59.99) {
-              throw new AssertionError("The price out of range: " + priceText);
-            }
+            assert price >= 50.00 && price <= 59.99
+                    : "The price out of range: " + priceText;
         }
-
     }
-
 }

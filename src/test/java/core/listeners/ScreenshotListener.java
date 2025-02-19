@@ -18,8 +18,6 @@ public class ScreenshotListener implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
-        // Retrieve the driver instance from your test class
-        Object testClass = result.getInstance();
         WebDriver driver = BaseInformation.getDriver(); // Ensure your test class extends BaseTest
         if (driver != null) {
             TakesScreenshot screenshotTaker = (TakesScreenshot) driver;

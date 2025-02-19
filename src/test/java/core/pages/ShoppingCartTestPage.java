@@ -51,13 +51,11 @@ public class ShoppingCartTestPage {
         }
 
     public void verifyFirstProductIsAddedToCart() {
-
         String productName1 = elements.productName1.getText().trim();
         String successfulMessageText = elements.successfulMessage1.getText().trim();
 
-        if (!successfulMessageText.equals("You added " + productName1 + " to your shopping cart.")) {
-            throw new AssertionError("The successful message does not contain the product name: " + productName1);
-        }
+        assert successfulMessageText.equals("You added " + productName1 + " to your shopping cart.")
+                : "The successful message does not contain the product name: " + productName1;
         WaitUtils.waitFor(1500);
     }
 
@@ -86,11 +84,9 @@ public class ShoppingCartTestPage {
         String productName2 = elements.productName2.getText().trim();
         String successfulMessageText = elements.successfulMessage2.getText().trim();
 
-        if (!successfulMessageText.equals("You added " + productName2 + " to your shopping cart.")) {
-            throw new AssertionError("The successful message does not contain the product name: " + productName2);
-        }
+        assert successfulMessageText.equals("You added " + productName2 + " to your shopping cart.")
+                : "The successful message does not contain the product name: " + productName2;
         WaitUtils.waitFor(1500);
-
     }
 
     public void clickOnShoppingCartLink() {
@@ -98,25 +94,19 @@ public class ShoppingCartTestPage {
         shoppingCartLink.click();
         WaitUtils.waitFor(1500);
     }
-
     public void verifyThatWeHaveNavigatedToShoppingCartPage() {
         String currentUrl = driver.getCurrentUrl();
-        if (!currentUrl.contains("checkout/cart")) {
-            throw new AssertionError("Not on the shopping cart page. Current URL: " + currentUrl);
-        }
+        assert currentUrl.contains("checkout/cart")
+                : "Not on the shopping cart page. Current URL: " + currentUrl;
     }
 
-
     public void verifyTotalShoppingSum() {
-
         int totalSum = Integer.parseInt(elements.totalShoppingSum.getText().replaceAll("[^\\d]", ""));
         int firstPrice = Integer.parseInt(elements.firstProductPrice.getText().replaceAll("[^\\d]", ""));
         int secondPrice = Integer.parseInt(elements.secondProductPrice.getText().replaceAll("[^\\d]", ""));
-
-        if(totalSum != (firstPrice + secondPrice)) {
-            throw new AssertionError("The total shopping sum does not match the total shopping sum.");
-        }
-
+        assert totalSum == (firstPrice + secondPrice)
+                : "The total shopping sum (" + totalSum + ") does not match the expected sum ("
+                + (firstPrice + secondPrice) + ").";
     }
 
 }
