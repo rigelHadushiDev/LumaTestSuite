@@ -13,7 +13,7 @@ This project is a Test Automation suite for the [Luma eCommerce Demo Website](ht
 4. [Setup Instructions](#setup-instructions)  
 5. [Test Scenarios Implemented](#test-scenarios-implemented)  
 6. [Features Implemented](#features-implemented)  
-7. [Known Limitations](#known-limitations)
+7. [Author](#author)
 
 ---
 
